@@ -16,8 +16,8 @@ namespace AutoMarket.Entidades
         private const int PrefijoIdCategoria = 1;
 
         private readonly int _idCategoria;
-        private string _nombreCategoria;
-        private string _descripcion;
+        private string _nombreCategoria = null!;
+        private string _descripcion = null!;
 
         public int IdCategoria => _idCategoria;
 
@@ -79,14 +79,14 @@ namespace AutoMarket.Entidades
             return $"Id: {_idCategoria} | Nombre: {_nombreCategoria} | Descripción: {_descripcion}";
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
             return Equals(obj as CategoriaVehiculo);
         }
 
-        public bool Equals(CategoriaVehiculo other)
+        public bool Equals(CategoriaVehiculo? other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
             return _idCategoria == other._idCategoria;
@@ -154,9 +154,9 @@ namespace AutoMarket.Entidades
             }
         }
 
-        private static string NormalizarTexto(string texto)
+        private static string NormalizarTexto(string? texto)
         {
-            return texto?.Trim();
+            return texto?.Trim() ?? string.Empty;
         }
     }
 }
