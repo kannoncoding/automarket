@@ -5,7 +5,6 @@ Proyecto: AutoMarket - Proyecto #1
 Descripción: Capa de Entidades. Clase que modela la categoría de vehículo.
 Estudiante: Irus Exactus
 Fecha de desarrollo: 2026-02-14
-Herramientas de apoyo: ChatGPT (OpenAI)
 */
 
 using System;
@@ -14,24 +13,18 @@ namespace AutoMarket.Entidades
 {
     public sealed class CategoriaVehiculo : IEquatable<CategoriaVehiculo>
     {
-        private int _idCategoria;
+        private const int PrefijoIdCategoria = 1;
+
+        private readonly int _idCategoria;
         private string _nombreCategoria;
         private string _descripcion;
 
-        public int IdCategoria
-        {
-            get => _idCategoria;
-            set
-            {
-                ValidarIdCategoria(value);
-                _idCategoria = value;
-            }
-        }
+        public int IdCategoria => _idCategoria;
 
         public string NombreCategoria
         {
             get => _nombreCategoria;
-            set
+            private set
             {
                 var nombre = NormalizarTexto(value);
                 ValidarNombreCategoria(nombre);
@@ -42,7 +35,7 @@ namespace AutoMarket.Entidades
         public string Descripcion
         {
             get => _descripcion;
-            set
+            private set
             {
                 var descripcion = NormalizarTexto(value);
                 ValidarDescripcion(descripcion);
@@ -50,43 +43,24 @@ namespace AutoMarket.Entidades
             }
         }
 
-        public CategoriaVehiculo()
-        {
-            _idCategoria = 1;
-            _nombreCategoria = "Sin categoría";
-            _descripcion = "Sin descripción";
-        }
-
         public CategoriaVehiculo(int idCategoria, string nombreCategoria, string descripcion)
         {
             ValidarIdCategoria(idCategoria);
 
-            var nombre = NormalizarTexto(nombreCategoria);
-            ValidarNombreCategoria(nombre);
-
-            var desc = NormalizarTexto(descripcion);
-            ValidarDescripcion(desc);
-
             _idCategoria = idCategoria;
-            _nombreCategoria = nombre;
-            _descripcion = desc;
+            NombreCategoria = nombreCategoria;
+            Descripcion = descripcion;
         }
 
         public void ActualizarDatos(string nombreCategoria, string descripcion)
         {
-            var nombre = NormalizarTexto(nombreCategoria);
-            ValidarNombreCategoria(nombre);
-
-            var desc = NormalizarTexto(descripcion);
-            ValidarDescripcion(desc);
-
-            _nombreCategoria = nombre;
-            _descripcion = desc;
+            NombreCategoria = nombreCategoria;
+            Descripcion = descripcion;
         }
 
         public bool EsValida()
         {
-            if (_idCategoria <= 0) return false;
+            if (!EsIdCategoriaValido(_idCategoria)) return false;
             if (string.IsNullOrWhiteSpace(_nombreCategoria)) return false;
             if (_nombreCategoria.Length > 60) return false;
             if (_descripcion == null) return false;
@@ -136,22 +110,34 @@ namespace AutoMarket.Entidades
 
         private static void ValidarIdCategoria(int idCategoria)
         {
-            if (idCategoria <= 0)
+            if (!EsIdCategoriaValido(idCategoria))
             {
-                throw new ArgumentOutOfRangeException(nameof(idCategoria), "El IdCategoría debe ser mayor a cero.");
+                throw new ArgumentOutOfRangeException(
+                    nameof(idCategoria),
+                    $"El IdCategoria debe ser un entero positivo y comenzar con el prefijo {PrefijoIdCategoria} (ej: 11, 12, 110).");
             }
+        }
+
+        private static bool EsIdCategoriaValido(int idCategoria)
+        {
+            if (idCategoria <= 0) return false;
+
+            var idTexto = idCategoria.ToString();
+            if (idTexto.Length < 2) return false;
+
+            return idTexto[0] == (char)('0' + PrefijoIdCategoria);
         }
 
         private static void ValidarNombreCategoria(string nombreCategoria)
         {
             if (string.IsNullOrWhiteSpace(nombreCategoria))
             {
-                throw new ArgumentException("El NombreCategoría es requerido.", nameof(nombreCategoria));
+                throw new ArgumentException("El NombreCategoria es requerido.", nameof(nombreCategoria));
             }
 
             if (nombreCategoria.Length > 60)
             {
-                throw new ArgumentException("El NombreCategoría no puede exceder 60 caracteres.", nameof(nombreCategoria));
+                throw new ArgumentException("El NombreCategoria no puede exceder 60 caracteres.", nameof(nombreCategoria));
             }
         }
 
@@ -159,19 +145,18 @@ namespace AutoMarket.Entidades
         {
             if (descripcion == null)
             {
-                throw new ArgumentNullException(nameof(descripcion), "La Descripción es requerida.");
+                throw new ArgumentNullException(nameof(descripcion), "La Descripcion es requerida.");
             }
 
             if (descripcion.Length > 200)
             {
-                throw new ArgumentException("La Descripción no puede exceder 200 caracteres.", nameof(descripcion));
+                throw new ArgumentException("La Descripcion no puede exceder 200 caracteres.", nameof(descripcion));
             }
         }
 
         private static string NormalizarTexto(string texto)
         {
-            if (texto == null) return null;
-            return texto.Trim();
+            return texto?.Trim();
         }
     }
 }
