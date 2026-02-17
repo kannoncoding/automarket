@@ -3,7 +3,7 @@ Universidad: UNED
 Cuatrimestre: I Cuatrimestre 2026
 Proyecto: AutoMarket - Proyecto #1
 Descripción: Capa de Entidades. Clase que modela la categoría de vehículo.
-Estudiante: Irus Exactus
+Estudiante: Jorge Arias
 Fecha de desarrollo: 2026-02-14
 */
 
