@@ -97,13 +97,13 @@ namespace AutoMarket.Entidades
             return _idCategoria.GetHashCode();
         }
 
-        public static bool operator ==(CategoriaVehiculo left, CategoriaVehiculo right)
+        public static bool operator ==(CategoriaVehiculo? left, CategoriaVehiculo? right)
         {
             if (ReferenceEquals(left, null)) return ReferenceEquals(right, null);
             return left.Equals(right);
         }
 
-        public static bool operator !=(CategoriaVehiculo left, CategoriaVehiculo right)
+        public static bool operator !=(CategoriaVehiculo? left, CategoriaVehiculo? right)
         {
             return !(left == right);
         }
