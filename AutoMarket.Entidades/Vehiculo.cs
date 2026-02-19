@@ -125,7 +125,7 @@ namespace AutoMarket.Entidades
             Estado = estado;
         }
 
-        public bool EsValida()
+        public bool EsValido()
         {
             if (!EsIdVehiculoValido(_idVehiculo)) return false;
             if (string.IsNullOrWhiteSpace(_marca)) return false;
