@@ -73,7 +73,7 @@ namespace AutoMarket.Datos
 
             for (int i = 0; i < _cantidadRegistros; i++)
             {
-                resultado[i] = _categorias[i];
+                resultado[i] = _categorias[i]!;
             }
 
             return resultado;
