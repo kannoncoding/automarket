@@ -4,7 +4,7 @@ Cuatrimestre: I Cuatrimestre 2026
 Proyecto: AutoMarket - Proyecto #1
 Descripción: Capa de Acceso a Datos. Almacenamiento en memoria de vendedores mediante arreglos y generación de IDs con prefijo.
 Estudiante: Jorge Arias
-Fecha de desarrollo: 2026-02-18
+Fecha de desarrollo: 2026-02-19
 */
 
 using System;
@@ -44,6 +44,9 @@ namespace AutoMarket.Datos
             ValidarCapacidadDisponible();
             ValidarCedulaDuplicada(cedula);
 
+            var correoNormalizado = NormalizarCorreo(correo);
+            ValidarCorreoDuplicado(correoNormalizado);
+
             var idGenerado = GenerarSiguienteId();
             var nuevoVendedor = new Vendedor(
                 idGenerado,
@@ -52,7 +55,7 @@ namespace AutoMarket.Datos
                 segundoApellido,
                 cedula,
                 telefono,
-                correo,
+                correoNormalizado,
                 fechaIngreso,
                 activo);
 
@@ -79,6 +82,7 @@ namespace AutoMarket.Datos
             ValidarCapacidadDisponible();
             ValidarDuplicadoId(vendedor.IdVendedor);
             ValidarCedulaDuplicada(vendedor.Cedula);
+            ValidarCorreoDuplicado(vendedor.Correo);
 
             _vendedores[_cantidadRegistros] = vendedor;
             _cantidadRegistros++;
@@ -135,6 +139,23 @@ namespace AutoMarket.Datos
             return false;
         }
 
+        public bool ExisteCorreo(string correo)
+        {
+            var correoNormalizado = NormalizarCorreo(correo);
+
+            for (int i = 0; i < _cantidadRegistros; i++)
+            {
+                var vendedor = _vendedores[i];
+
+                if (vendedor is not null && string.Equals(vendedor.Correo, correoNormalizado, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private void ValidarDuplicadoId(int idVendedor)
         {
             if (ExisteId(idVendedor))
@@ -157,6 +178,23 @@ namespace AutoMarket.Datos
                 throw new ArgumentException(
                     $"Ya existe un vendedor con la Cédula {NormalizarTexto(cedula)}.",
                     nameof(cedula));
+            }
+        }
+
+        private void ValidarCorreoDuplicado(string correo)
+        {
+            if (string.IsNullOrWhiteSpace(correo))
+            {
+                throw new ArgumentException("El Correo es requerido.", nameof(correo));
+            }
+
+            var correoNormalizado = NormalizarCorreo(correo);
+
+            if (ExisteCorreo(correoNormalizado))
+            {
+                throw new ArgumentException(
+                    $"Ya existe un vendedor con el Correo {correoNormalizado}.",
+                    nameof(correo));
             }
         }
 
@@ -202,6 +240,11 @@ namespace AutoMarket.Datos
         private static string NormalizarTexto(string? texto)
         {
             return texto?.Trim() ?? string.Empty;
+        }
+
+        private static string NormalizarCorreo(string? correo)
+        {
+            return (correo?.Trim() ?? string.Empty).ToLowerInvariant();
         }
     }
 }

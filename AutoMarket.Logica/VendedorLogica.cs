@@ -47,7 +47,7 @@ namespace AutoMarket.Logica
                 var segundoApellidoNormalizado = NormalizarTexto(segundoApellido);
                 var cedulaNormalizada = NormalizarTexto(cedula);
                 var telefonoNormalizado = NormalizarTexto(telefono);
-                var correoNormalizado = NormalizarTexto(correo);
+                var correoNormalizado = NormalizarCorreo(correo);
 
                 ValidarNombre(nombreNormalizado);
                 ValidarPrimerApellido(primerApellidoNormalizado);
@@ -60,6 +60,11 @@ namespace AutoMarket.Logica
                 if (_datos.ExisteCedula(cedulaNormalizada))
                 {
                     throw new ArgumentException($"Ya existe un vendedor con la Cédula {cedulaNormalizada}.", nameof(cedula));
+                }
+
+                if (_datos.ExisteCorreo(correoNormalizado))
+                {
+                    throw new ArgumentException($"Ya existe un vendedor con el Correo {correoNormalizado}.", nameof(correo));
                 }
 
                 return _datos.Agregar(
@@ -99,6 +104,11 @@ namespace AutoMarket.Logica
                 if (_datos.ExisteCedula(vendedor.Cedula))
                 {
                     throw new ArgumentException($"Ya existe un vendedor con la Cédula {NormalizarTexto(vendedor.Cedula)}.", nameof(vendedor));
+                }
+
+                if (_datos.ExisteCorreo(vendedor.Correo))
+                {
+                    throw new ArgumentException($"Ya existe un vendedor con el Correo {NormalizarCorreo(vendedor.Correo)}.", nameof(vendedor));
                 }
 
                 _datos.Agregar(vendedor);
@@ -156,6 +166,12 @@ namespace AutoMarket.Logica
         {
             if (string.IsNullOrWhiteSpace(cedula)) return false;
             return _datos.ExisteCedula(NormalizarTexto(cedula));
+        }
+
+        public bool ExisteCorreo(string correo)
+        {
+            if (string.IsNullOrWhiteSpace(correo)) return false;
+            return _datos.ExisteCorreo(NormalizarCorreo(correo));
         }
 
         private static void ValidarNombre(string nombre)
@@ -247,6 +263,11 @@ namespace AutoMarket.Logica
         private static string NormalizarTexto(string? texto)
         {
             return texto?.Trim() ?? string.Empty;
+        }
+
+        private static string NormalizarCorreo(string? correo)
+        {
+            return (correo?.Trim() ?? string.Empty).ToLowerInvariant();
         }
     }
 }
