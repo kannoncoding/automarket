@@ -40,7 +40,7 @@ namespace AutoMarket.Datos
         public Vehiculo Agregar(string marca, string modelo, int anio, decimal precio, int idCategoria, char estado)
         {
             ValidarCapacidadDisponible();
-            ValidarEstado(estado);
+            var estadoNormalizado = NormalizarEstado(estado);
 
             var categoria = _categoriaVehiculoDatos.ObtenerPorId(idCategoria);
             if (categoria is null)
@@ -51,7 +51,7 @@ namespace AutoMarket.Datos
             }
 
             var idGenerado = GenerarSiguienteId();
-            var nuevoVehiculo = new Vehiculo(idGenerado, marca, modelo, anio, precio, categoria, estado);
+            var nuevoVehiculo = new Vehiculo(idGenerado, marca, modelo, anio, precio, categoria, estadoNormalizado);
 
             ValidarDuplicadoId(nuevoVehiculo.IdVehiculo);
 
@@ -149,13 +149,21 @@ namespace AutoMarket.Datos
 
         private static void ValidarEstado(char estado)
         {
-            if (estado != 'N' && estado != 'U')
+            var estadoNormalizado = NormalizarEstado(estado);
+
+            if (estadoNormalizado != 'N' && estadoNormalizado != 'U')
             {
                 throw new ArgumentException(
                     "El Estado del vehículo es inválido. Valores permitidos: 'N' (Nuevo) o 'U' (Usado).",
                     nameof(estado));
             }
         }
+
+        private static char NormalizarEstado(char estado)
+        {
+            return char.ToUpperInvariant(estado);
+        }
+
 
         private int GenerarSiguienteId()
         {
