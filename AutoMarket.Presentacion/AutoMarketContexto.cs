@@ -33,9 +33,9 @@ namespace AutoMarket.Presentacion
         {
             _categoriaVehiculoDatos = new CategoriaVehiculoDatos();
             _vendedorDatos = new VendedorDatos();
-            _sucursalDatos = new SucursalDatos();
             _clienteDatos = new ClienteDatos();
 
+            _sucursalDatos = new SucursalDatos(_vendedorDatos);
             _vehiculoDatos = new VehiculoDatos(_categoriaVehiculoDatos);
             _vehiculoxSucursalDatos = new VehiculoxSucursalDatos(_sucursalDatos, _vehiculoDatos);
 

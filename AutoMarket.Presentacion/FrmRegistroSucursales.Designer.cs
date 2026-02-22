@@ -27,6 +27,8 @@
             txtTelefono = new TextBox();
             lblCorreo = new Label();
             txtCorreo = new TextBox();
+            lblVendedorEncargado = new Label();
+            cboVendedorEncargado = new ComboBox();
             chkActiva = new CheckBox();
             panelBotones = new FlowLayoutPanel();
             btnRegistrar = new Button();
@@ -50,23 +52,26 @@
             tableLayoutPanel1.Controls.Add(txtTelefono, 1, 3);
             tableLayoutPanel1.Controls.Add(lblCorreo, 0, 4);
             tableLayoutPanel1.Controls.Add(txtCorreo, 1, 4);
-            tableLayoutPanel1.Controls.Add(chkActiva, 1, 5);
-            tableLayoutPanel1.Controls.Add(panelBotones, 0, 6);
-            tableLayoutPanel1.Controls.Add(lblEstado, 0, 7);
+            tableLayoutPanel1.Controls.Add(lblVendedorEncargado, 0, 5);
+            tableLayoutPanel1.Controls.Add(cboVendedorEncargado, 1, 5);
+            tableLayoutPanel1.Controls.Add(chkActiva, 1, 6);
+            tableLayoutPanel1.Controls.Add(panelBotones, 0, 7);
+            tableLayoutPanel1.Controls.Add(lblEstado, 0, 8);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.Padding = new Padding(12);
-            tableLayoutPanel1.RowCount = 8;
+            tableLayoutPanel1.RowCount = 9;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 58F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 34F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 44F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-            tableLayoutPanel1.Size = new Size(720, 360);
+            tableLayoutPanel1.Size = new Size(720, 376);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // lblTitulo
@@ -150,13 +155,32 @@
             txtCorreo.Size = new Size(468, 23);
             txtCorreo.TabIndex = 8;
             // 
+            // lblVendedorEncargado
+            // 
+            lblVendedorEncargado.AutoSize = true;
+            lblVendedorEncargado.Location = new Point(15, 200);
+            lblVendedorEncargado.Name = "lblVendedorEncargado";
+            lblVendedorEncargado.Size = new Size(178, 15);
+            lblVendedorEncargado.TabIndex = 9;
+            lblVendedorEncargado.Text = "Vendedor Encargado (requerido)";
+            // 
+            // cboVendedorEncargado
+            // 
+            cboVendedorEncargado.Dock = DockStyle.Fill;
+            cboVendedorEncargado.DropDownStyle = ComboBoxStyle.DropDownList;
+            cboVendedorEncargado.FormattingEnabled = true;
+            cboVendedorEncargado.Location = new Point(237, 203);
+            cboVendedorEncargado.Name = "cboVendedorEncargado";
+            cboVendedorEncargado.Size = new Size(468, 23);
+            cboVendedorEncargado.TabIndex = 10;
+            // 
             // chkActiva
             // 
             chkActiva.AutoSize = true;
-            chkActiva.Location = new Point(237, 203);
+            chkActiva.Location = new Point(237, 237);
             chkActiva.Name = "chkActiva";
             chkActiva.Size = new Size(59, 19);
-            chkActiva.TabIndex = 9;
+            chkActiva.TabIndex = 11;
             chkActiva.Text = "Activa";
             chkActiva.UseVisualStyleBackColor = true;
             // 
@@ -166,11 +190,11 @@
             panelBotones.Controls.Add(btnRegistrar);
             panelBotones.Controls.Add(btnLimpiar);
             panelBotones.Dock = DockStyle.Fill;
-            panelBotones.Location = new Point(15, 231);
+            panelBotones.Location = new Point(15, 265);
             panelBotones.Name = "panelBotones";
             panelBotones.Padding = new Padding(0, 8, 0, 0);
             panelBotones.Size = new Size(690, 38);
-            panelBotones.TabIndex = 10;
+            panelBotones.TabIndex = 12;
             panelBotones.WrapContents = false;
             // 
             // btnRegistrar
@@ -200,10 +224,10 @@
             lblEstado.AutoSize = true;
             tableLayoutPanel1.SetColumnSpan(lblEstado, 2);
             lblEstado.Dock = DockStyle.Fill;
-            lblEstado.Location = new Point(15, 272);
+            lblEstado.Location = new Point(15, 306);
             lblEstado.Name = "lblEstado";
-            lblEstado.Size = new Size(690, 76);
-            lblEstado.TabIndex = 11;
+            lblEstado.Size = new Size(690, 58);
+            lblEstado.TabIndex = 13;
             lblEstado.Text = "Registros: 0 / 0";
             lblEstado.TextAlign = ContentAlignment.MiddleLeft;
             // 
@@ -211,7 +235,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(720, 360);
+            ClientSize = new Size(720, 376);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -239,6 +263,8 @@
         private TextBox txtTelefono;
         private Label lblCorreo;
         private TextBox txtCorreo;
+        private Label lblVendedorEncargado;
+        private ComboBox cboVendedorEncargado;
         private CheckBox chkActiva;
         private FlowLayoutPanel panelBotones;
         private Button btnRegistrar;

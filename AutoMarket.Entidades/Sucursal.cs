@@ -22,6 +22,8 @@ namespace AutoMarket.Entidades
         private string _correo = null!;
         private bool _activa;
 
+        private Vendedor _vendedorEncargado = null!;
+
         public int IdSucursal => _idSucursal;
 
         public string Nombre
@@ -68,6 +70,16 @@ namespace AutoMarket.Entidades
             }
         }
 
+        public Vendedor VendedorEncargado
+        {
+            get => _vendedorEncargado;
+            private set
+            {
+                ValidarVendedorEncargado(value);
+                _vendedorEncargado = value;
+            }
+        }
+
         public bool Activa
         {
             get => _activa;
@@ -80,6 +92,7 @@ namespace AutoMarket.Entidades
             string direccion,
             string telefono,
             string correo,
+            Vendedor vendedorEncargado,
             bool activa)
         {
             ValidarIdSucursal(idSucursal);
@@ -89,6 +102,7 @@ namespace AutoMarket.Entidades
             Direccion = direccion;
             Telefono = telefono;
             Correo = correo;
+            VendedorEncargado = vendedorEncargado;
             Activa = activa;
         }
 
@@ -97,12 +111,14 @@ namespace AutoMarket.Entidades
             string direccion,
             string telefono,
             string correo,
+            Vendedor vendedorEncargado,
             bool activa)
         {
             Nombre = nombre;
             Direccion = direccion;
             Telefono = telefono;
             Correo = correo;
+            VendedorEncargado = vendedorEncargado;
             Activa = activa;
         }
 
@@ -123,6 +139,7 @@ namespace AutoMarket.Entidades
             if (string.IsNullOrWhiteSpace(_direccion)) return false;
             if (string.IsNullOrWhiteSpace(_telefono)) return false;
             if (string.IsNullOrWhiteSpace(_correo)) return false;
+            if (_vendedorEncargado is null) return false;
 
             return true;
         }
@@ -130,13 +147,13 @@ namespace AutoMarket.Entidades
         public string ObtenerResumen()
         {
             var estado = _activa ? "Activa" : "Inactiva";
-            return $"{_nombre} | Tel: {_telefono} | {estado}";
+            return $"{_nombre} | Tel: {_telefono} | Encargado: {_vendedorEncargado.Nombre} | {estado}";
         }
 
         public override string ToString()
         {
             var estado = _activa ? "Activa" : "Inactiva";
-            return $"Id: {_idSucursal} | Nombre: {_nombre} | Dirección: {_direccion} | Teléfono: {_telefono} | Correo: {_correo} | Estado: {estado}";
+            return $"Id: {_idSucursal} | Nombre: {_nombre} | Dirección: {_direccion} | Teléfono: {_telefono} | Correo: {_correo} | Encargado: {_vendedorEncargado.Nombre} | Estado: {estado}";
         }
 
         public override bool Equals(object? obj)
@@ -222,6 +239,14 @@ namespace AutoMarket.Entidades
 
             if (correo.Length > 120)
                 throw new ArgumentException("El Correo no puede exceder 120 caracteres.", nameof(correo));
+        }
+
+        private static void ValidarVendedorEncargado(Vendedor vendedorEncargado)
+        {
+            if (vendedorEncargado is null)
+            {
+                throw new ArgumentNullException(nameof(vendedorEncargado), "El Vendedor Encargado es requerido.");
+            }
         }
 
         private static string NormalizarTexto(string? texto)

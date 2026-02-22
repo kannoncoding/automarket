@@ -4,7 +4,7 @@ Cuatrimestre: I Cuatrimestre 2026
 Proyecto: AutoMarket - Proyecto #1
 Descripción: Capa de Acceso a Datos. Almacenamiento en memoria de sucursales mediante arreglos y generación de IDs con prefijo.
 Estudiante: Jorge Arias
-Fecha de desarrollo: 2026-02-18
+Fecha de desarrollo: 2026-02-21
 */
 
 using System;
@@ -21,11 +21,17 @@ namespace AutoMarket.Datos
         private int _cantidadRegistros;
         private int _consecutivo;
 
+        private readonly VendedorDatos _vendedorDatos;
+
         public int CantidadRegistros => _cantidadRegistros;
         public int Capacidad => CapacidadMaxima;
 
-        public SucursalDatos()
+        public SucursalDatos(VendedorDatos vendedorDatos)
         {
+            _vendedorDatos = vendedorDatos ?? throw new ArgumentNullException(
+                nameof(vendedorDatos),
+                "El acceso a datos de vendedores es requerido para validar referencias.");
+
             _sucursales = new Sucursal[CapacidadMaxima];
             _cantidadRegistros = 0;
             _consecutivo = 1;
@@ -36,10 +42,19 @@ namespace AutoMarket.Datos
             string direccion,
             string telefono,
             string correo,
+            int idVendedorEncargado,
             bool activa)
         {
             ValidarCapacidadDisponible();
             ValidarCorreoDuplicado(correo);
+
+            var vendedorEncargado = _vendedorDatos.ObtenerPorId(idVendedorEncargado);
+            if (vendedorEncargado is null)
+            {
+                throw new ArgumentException(
+                    $"El vendedor encargado indicado no existe. IdVendedor: {idVendedorEncargado}.",
+                    nameof(idVendedorEncargado));
+            }
 
             var idGenerado = GenerarSiguienteId();
             var nuevaSucursal = new Sucursal(
@@ -48,6 +63,7 @@ namespace AutoMarket.Datos
                 direccion,
                 telefono,
                 correo,
+                vendedorEncargado,
                 activa);
 
             ValidarDuplicadoId(nuevaSucursal.IdSucursal);
@@ -73,6 +89,18 @@ namespace AutoMarket.Datos
             ValidarCapacidadDisponible();
             ValidarDuplicadoId(sucursal.IdSucursal);
             ValidarCorreoDuplicado(sucursal.Correo);
+
+            if (sucursal.VendedorEncargado is null)
+            {
+                throw new ArgumentException("El Vendedor Encargado es requerido.", nameof(sucursal));
+            }
+
+            if (!_vendedorDatos.ExisteId(sucursal.VendedorEncargado.IdVendedor))
+            {
+                throw new ArgumentException(
+                    $"El vendedor encargado asociado a la sucursal no existe en el registro. IdVendedor: {sucursal.VendedorEncargado.IdVendedor}.",
+                    nameof(sucursal));
+            }
 
             _sucursales[_cantidadRegistros] = sucursal;
             _cantidadRegistros++;

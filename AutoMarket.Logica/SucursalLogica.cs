@@ -4,7 +4,7 @@ Cuatrimestre: I Cuatrimestre 2026
 Proyecto: AutoMarket - Proyecto #1
 Descripción: Capa de Lógica de Negocio. Reglas y validaciones para la gestión de sucursales.
 Estudiante: Jorge Arias
-Fecha de desarrollo: 2026-02-20
+Fecha de desarrollo: 2026-02-19
 */
 
 using System;
@@ -20,11 +20,6 @@ namespace AutoMarket.Logica
         public int CantidadRegistros => _datos.CantidadRegistros;
         public int Capacidad => _datos.Capacidad;
 
-        public SucursalLogica()
-            : this(new SucursalDatos())
-        {
-        }
-
         public SucursalLogica(SucursalDatos datos)
         {
             _datos = datos ?? throw new ArgumentNullException(nameof(datos), "La capa de datos es requerida.");
@@ -35,6 +30,7 @@ namespace AutoMarket.Logica
             string direccion,
             string telefono,
             string correo,
+            int idVendedorEncargado,
             bool activa)
         {
             try
@@ -48,6 +44,7 @@ namespace AutoMarket.Logica
                 ValidarDireccion(direccionNormalizada);
                 ValidarTelefono(telefonoNormalizado);
                 ValidarCorreo(correoNormalizado);
+                ValidarIdVendedorEncargado(idVendedorEncargado);
 
                 if (_datos.ExisteCorreo(correoNormalizado))
                 {
@@ -59,6 +56,7 @@ namespace AutoMarket.Logica
                     direccionNormalizada,
                     telefonoNormalizado,
                     correoNormalizado,
+                    idVendedorEncargado,
                     activa);
             }
             catch (Exception ex) when (
@@ -145,6 +143,14 @@ namespace AutoMarket.Logica
         {
             if (string.IsNullOrWhiteSpace(correo)) return false;
             return _datos.ExisteCorreo(NormalizarTexto(correo));
+        }
+
+        private static void ValidarIdVendedorEncargado(int idVendedorEncargado)
+        {
+            if (idVendedorEncargado <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(idVendedorEncargado), "El IdVendedor Encargado debe ser un entero positivo.");
+            }
         }
 
         private static void ValidarNombre(string nombre)

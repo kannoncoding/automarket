@@ -2,13 +2,14 @@
 Universidad: UNED
 Cuatrimestre: I Cuatrimestre 2026
 Proyecto: AutoMarket - Proyecto #1
-Descripción: Capa de Presentación. Formulario de registro de sucursales con validación UX mínima y manejo de errores.
+Descripción: Capa de Presentación. Formulario de registro de sucursales con selección de vendedor encargado.
 Estudiante: Jorge Arias
 Fecha de desarrollo: 2026-02-21
 */
 
 using System;
 using System.Windows.Forms;
+using AutoMarket.Entidades;
 
 namespace AutoMarket.Presentacion
 {
@@ -24,76 +25,109 @@ namespace AutoMarket.Presentacion
 
         private void FrmRegistroSucursales_Load(object sender, EventArgs e)
         {
-            ConfigurarControles();
-
-            lblEstado.Text = ObtenerTextoEstado();
-            txtNombre.Focus();
+            try
+            {
+                CargarVendedores();
+                ActualizarEstado();
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void btnRegistrar_Click(object sender, EventArgs e)
         {
-            if (!ValidarFormulario())
-            {
-                MessageBox.Show(
-                    "Debe completar los campos requeridos antes de registrar.",
-                    "Validación",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-
-                return;
-            }
-
             try
             {
-                var sucursal = _contexto.SucursalLogica.Agregar(
+                if (!CamposMinimosValidos())
+                {
+                    MessageBox.Show(
+                        "Complete los campos requeridos antes de registrar.",
+                        "Validación",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                if (cboVendedorEncargado.SelectedItem is not Vendedor vendedor)
+                {
+                    MessageBox.Show(
+                        "Debe seleccionar un vendedor encargado.",
+                        "Validación",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    return;
+                }
+
+                _contexto.SucursalLogica.Agregar(
                     txtNombre.Text,
                     txtDireccion.Text,
                     txtTelefono.Text,
                     txtCorreo.Text,
+                    vendedor.IdVendedor,
                     chkActiva.Checked);
 
                 MessageBox.Show(
-                    $"Registro exitoso.\n\n{sucursal}",
-                    "AutoMarket",
+                    "Sucursal registrada correctamente.",
+                    "Éxito",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
 
                 LimpiarFormulario();
-                lblEstado.Text = ObtenerTextoEstado();
-                txtNombre.Focus();
+                ActualizarEstado();
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show(
-                    ex.Message,
-                    "No se pudo registrar",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "No se pudo registrar", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ActualizarEstado();
             }
         }
 
         private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarFormulario();
-            txtNombre.Focus();
         }
 
-        private void ConfigurarControles()
+        private void CargarVendedores()
         {
-            txtNombre.MaxLength = 80;
-            txtDireccion.MaxLength = 200;
-            txtTelefono.MaxLength = 20;
-            txtCorreo.MaxLength = 120;
+            var vendedores = _contexto.VendedorLogica.ObtenerTodos();
 
-            chkActiva.Checked = true;
+            cboVendedorEncargado.BeginUpdate();
+            cboVendedorEncargado.DataSource = null;
+
+            // Para compilar sin depender de nombres de propiedades:
+            // el ComboBox mostrará lo que devuelva Vendedor.ToString().
+            cboVendedorEncargado.DataSource = vendedores;
+
+            cboVendedorEncargado.EndUpdate();
+
+            var hayVendedores = cboVendedorEncargado.Items.Count > 0;
+            btnRegistrar.Enabled = hayVendedores;
+
+            if (!hayVendedores)
+            {
+                MessageBox.Show(
+                    "Debe registrar al menos un vendedor antes de registrar sucursales.",
+                    "Información",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                cboVendedorEncargado.SelectedIndex = 0;
+            }
         }
 
-        private bool ValidarFormulario()
+        private bool CamposMinimosValidos()
         {
             if (string.IsNullOrWhiteSpace(txtNombre.Text)) return false;
             if (string.IsNullOrWhiteSpace(txtDireccion.Text)) return false;
             if (string.IsNullOrWhiteSpace(txtTelefono.Text)) return false;
             if (string.IsNullOrWhiteSpace(txtCorreo.Text)) return false;
+            if (cboVendedorEncargado.SelectedItem is null) return false;
 
             return true;
         }
@@ -104,13 +138,20 @@ namespace AutoMarket.Presentacion
             txtDireccion.Clear();
             txtTelefono.Clear();
             txtCorreo.Clear();
+            chkActiva.Checked = false;
 
-            chkActiva.Checked = true;
+            if (cboVendedorEncargado.Items.Count > 0)
+            {
+                cboVendedorEncargado.SelectedIndex = 0;
+            }
+
+            txtNombre.Focus();
         }
 
-        private string ObtenerTextoEstado()
+        private void ActualizarEstado()
         {
-            return $"Registros: {_contexto.SucursalLogica.CantidadRegistros} / {_contexto.SucursalLogica.Capacidad}";
+            lblEstado.Text =
+                $"Registros: {_contexto.SucursalLogica.CantidadRegistros} / {_contexto.SucursalLogica.Capacidad}";
         }
     }
 }
