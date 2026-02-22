@@ -48,7 +48,6 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 32F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 68F));
             tableLayoutPanel1.Controls.Add(lblTitulo, 0, 0);
-            tableLayoutPanel1.SetColumnSpan(lblTitulo, 2);
             tableLayoutPanel1.Controls.Add(lblNombre, 0, 1);
             tableLayoutPanel1.Controls.Add(txtNombre, 1, 1);
             tableLayoutPanel1.Controls.Add(lblPrimerApellido, 0, 2);
@@ -65,9 +64,7 @@
             tableLayoutPanel1.Controls.Add(dtpFechaIngreso, 1, 7);
             tableLayoutPanel1.Controls.Add(chkActivo, 1, 8);
             tableLayoutPanel1.Controls.Add(panelBotones, 0, 9);
-            tableLayoutPanel1.SetColumnSpan(panelBotones, 2);
             tableLayoutPanel1.Controls.Add(lblEstado, 0, 10);
-            tableLayoutPanel1.SetColumnSpan(lblEstado, 2);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -90,10 +87,11 @@
             // lblTitulo
             // 
             lblTitulo.AutoSize = true;
-            lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            tableLayoutPanel1.SetColumnSpan(lblTitulo, 2);
+            lblTitulo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblTitulo.Location = new Point(15, 12);
             lblTitulo.Name = "lblTitulo";
-            lblTitulo.Size = new Size(202, 21);
+            lblTitulo.Size = new Size(190, 21);
             lblTitulo.TabIndex = 0;
             lblTitulo.Text = "Registro de Vendedores";
             // 
@@ -102,7 +100,7 @@
             lblNombre.AutoSize = true;
             lblNombre.Location = new Point(15, 40);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(107, 15);
+            lblNombre.Size = new Size(113, 15);
             lblNombre.TabIndex = 1;
             lblNombre.Text = "Nombre (requerido)";
             // 
@@ -119,7 +117,7 @@
             lblPrimerApellido.AutoSize = true;
             lblPrimerApellido.Location = new Point(15, 74);
             lblPrimerApellido.Name = "lblPrimerApellido";
-            lblPrimerApellido.Size = new Size(146, 15);
+            lblPrimerApellido.Size = new Size(151, 15);
             lblPrimerApellido.TabIndex = 3;
             lblPrimerApellido.Text = "Primer Apellido (requerido)";
             // 
@@ -136,7 +134,7 @@
             lblSegundoApellido.AutoSize = true;
             lblSegundoApellido.Location = new Point(15, 108);
             lblSegundoApellido.Name = "lblSegundoApellido";
-            lblSegundoApellido.Size = new Size(156, 15);
+            lblSegundoApellido.Size = new Size(163, 15);
             lblSegundoApellido.TabIndex = 5;
             lblSegundoApellido.Text = "Segundo Apellido (requerido)";
             // 
@@ -153,7 +151,7 @@
             lblCedula.AutoSize = true;
             lblCedula.Location = new Point(15, 142);
             lblCedula.Name = "lblCedula";
-            lblCedula.Size = new Size(104, 15);
+            lblCedula.Size = new Size(106, 15);
             lblCedula.TabIndex = 7;
             lblCedula.Text = "Cédula (requerido)";
             // 
@@ -170,7 +168,7 @@
             lblTelefono.AutoSize = true;
             lblTelefono.Location = new Point(15, 176);
             lblTelefono.Name = "lblTelefono";
-            lblTelefono.Size = new Size(113, 15);
+            lblTelefono.Size = new Size(115, 15);
             lblTelefono.TabIndex = 9;
             lblTelefono.Text = "Teléfono (requerido)";
             // 
@@ -204,7 +202,7 @@
             lblFechaIngreso.AutoSize = true;
             lblFechaIngreso.Location = new Point(15, 244);
             lblFechaIngreso.Name = "lblFechaIngreso";
-            lblFechaIngreso.Size = new Size(175, 15);
+            lblFechaIngreso.Size = new Size(158, 15);
             lblFechaIngreso.TabIndex = 13;
             lblFechaIngreso.Text = "Fecha de Ingreso (requerido)";
             // 
@@ -212,7 +210,7 @@
             // 
             dtpFechaIngreso.Location = new Point(228, 247);
             dtpFechaIngreso.Name = "dtpFechaIngreso";
-            dtpFechaIngreso.Size = new Size(170, 23);
+            dtpFechaIngreso.Size = new Size(220, 23);
             dtpFechaIngreso.TabIndex = 14;
             // 
             // chkActivo
@@ -227,10 +225,10 @@
             // 
             // panelBotones
             // 
+            tableLayoutPanel1.SetColumnSpan(panelBotones, 2);
             panelBotones.Controls.Add(btnRegistrar);
             panelBotones.Controls.Add(btnLimpiar);
             panelBotones.Dock = DockStyle.Fill;
-            panelBotones.FlowDirection = FlowDirection.LeftToRight;
             panelBotones.Location = new Point(15, 309);
             panelBotones.Name = "panelBotones";
             panelBotones.Padding = new Padding(0, 8, 0, 0);
@@ -241,6 +239,7 @@
             // btnRegistrar
             // 
             btnRegistrar.AutoSize = true;
+            btnRegistrar.Location = new Point(3, 11);
             btnRegistrar.Name = "btnRegistrar";
             btnRegistrar.Size = new Size(84, 25);
             btnRegistrar.TabIndex = 0;
@@ -251,6 +250,7 @@
             // btnLimpiar
             // 
             btnLimpiar.AutoSize = true;
+            btnLimpiar.Location = new Point(93, 11);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(74, 25);
             btnLimpiar.TabIndex = 1;
@@ -261,10 +261,11 @@
             // lblEstado
             // 
             lblEstado.AutoSize = true;
+            tableLayoutPanel1.SetColumnSpan(lblEstado, 2);
             lblEstado.Dock = DockStyle.Fill;
             lblEstado.Location = new Point(15, 350);
             lblEstado.Name = "lblEstado";
-            lblEstado.Size = new Size(660, 22);
+            lblEstado.Size = new Size(660, 54);
             lblEstado.TabIndex = 17;
             lblEstado.Text = "Registros: 0 / 0";
             lblEstado.TextAlign = ContentAlignment.MiddleLeft;
