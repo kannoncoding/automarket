@@ -1,17 +1,26 @@
+/*
+Universidad: UNED
+Cuatrimestre: I Cuatrimestre 2026
+Proyecto: AutoMarket - Proyecto #1
+Descripción: Punto de entrada de la aplicación (WinForms).
+Estudiante: Jorge Arias
+Fecha de desarrollo: 2026-02-22
+*/
+
+using System;
+using System.Windows.Forms;
+
 namespace AutoMarket.Presentacion
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+
+            AutoMarketContexto contexto = new AutoMarketContexto();
+            Application.Run(new FrmMenuPrincipal(contexto));
         }
     }
 }
